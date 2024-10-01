@@ -1,4 +1,4 @@
-package com.kaushik.kavach
+package com.kaushik.kavach.screens
 
 import android.content.Intent
 import android.net.Uri
@@ -6,13 +6,11 @@ import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,18 +18,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ShowAlert(navController: NavHostController) {
+fun ShowAlert(navController: NavHostController, iconsList: List<Painter>) {
     val context = LocalContext.current
 
     BasicAlertDialog(
@@ -42,7 +38,6 @@ fun ShowAlert(navController: NavHostController) {
             .fillMaxWidth(.7f)
             .fillMaxHeight(.3f)
             .background(Color.White)
-
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -52,8 +47,12 @@ fun ShowAlert(navController: NavHostController) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center
             ) {
-                Icon(painter = painterResource(id = R.drawable.location), contentDescription = null)
-                Icon(painter = painterResource(id = R.drawable.mic), contentDescription = null)
+                iconsList.forEach {
+                    Icon(
+                        painter = it,
+                        contentDescription = "icon"
+                    )
+                }
             }
             Text(
                 text = "Please grant permissions to continue\n" +

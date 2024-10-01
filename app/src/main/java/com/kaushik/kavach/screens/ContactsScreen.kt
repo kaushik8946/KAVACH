@@ -1,9 +1,5 @@
-package com.kaushik.kavach
+package com.kaushik.kavach.screens
 
-import android.Manifest
-import android.app.Activity
-import android.content.pm.PackageManager
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,14 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
-
-const val REQUEST_PERMISSIONS_CODE = 123
+import com.kaushik.kavach.db.ContactDatabase
 
 @Composable
-fun HomeScreen(navController: NavHostController) {
+fun ContactsScreen(navController: NavHostController, db: ContactDatabase) {
     val context = LocalContext.current
     val cardElevation = CardDefaults.cardElevation(
         defaultElevation = 10.dp,
@@ -38,46 +31,31 @@ fun HomeScreen(navController: NavHostController) {
     Column(
         modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceAround
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
         Card(
-            elevation = cardElevation,
             modifier = cardModifier,
+            elevation = cardElevation,
             onClick = {
-                var hasMicPermission = ContextCompat.checkSelfPermission(
+                /*var hasContactPermission = ContextCompat.checkSelfPermission(
                     context,
-                    Manifest.permission.RECORD_AUDIO
+                    Manifest.permission.READ_CONTACTS
                 ) == PackageManager.PERMISSION_GRANTED
-                var hasLocationPermission = ContextCompat.checkSelfPermission(
-                    context,
-                    Manifest.permission.ACCESS_FINE_LOCATION
-                ) == PackageManager.PERMISSION_GRANTED
-                val permissions = mutableListOf<String>()
-                if (!hasLocationPermission) {
-                    permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
-                }
-                if (!hasMicPermission) {
-                    permissions.add(Manifest.permission.RECORD_AUDIO)
-                }
-                if (permissions.isNotEmpty()) {
+                if(!hasContactPermission) {
                     ActivityCompat.requestPermissions(
                         context as Activity,
-                        permissions.toTypedArray(), REQUEST_PERMISSIONS_CODE
+                        arrayOf(Manifest.permission.READ_CONTACTS), REQUEST_PERMISSIONS_CODE
                     )
-                    hasMicPermission = ContextCompat.checkSelfPermission(
+                    hasContactPermission = ContextCompat.checkSelfPermission(
                         context,
-                        Manifest.permission.RECORD_AUDIO
-                    ) == PackageManager.PERMISSION_GRANTED
-                    hasLocationPermission = ContextCompat.checkSelfPermission(
-                        context,
-                        Manifest.permission.ACCESS_FINE_LOCATION
+                        Manifest.permission.READ_CONTACTS
                     ) == PackageManager.PERMISSION_GRANTED
                 }
-                if (!hasLocationPermission || !hasMicPermission) {
-                    navController.navigate("alert")
+                if(!hasContactPermission) {
+                    navController.navigate("alert-contacts")
                 } else {
-                    navController.navigate("voice")
-                }
+                }*/
+                navController.navigate("add-contact")
             }
         ) {
             Box(
@@ -85,16 +63,16 @@ fun HomeScreen(navController: NavHostController) {
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = "Activate",
+                    text = "Add Contact",
                     fontSize = 30.sp
                 )
             }
         }
         Card(
-            elevation = cardElevation,
             modifier = cardModifier,
+            elevation = cardElevation,
             onClick = {
-                Toast.makeText(context, "Not yet implemented", Toast.LENGTH_SHORT).show()
+                navController.navigate("view-contacts")
             }
         ) {
             Box(
@@ -102,11 +80,10 @@ fun HomeScreen(navController: NavHostController) {
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = "Contacts",
+                    text = "View Contacts",
                     fontSize = 30.sp
                 )
             }
         }
     }
 }
-

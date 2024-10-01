@@ -1,12 +1,16 @@
-package com.kaushik.kavach
+package com.kaushik.kavach.screens
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.Location
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.telephony.SmsManager
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -26,12 +30,33 @@ import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
+import com.google.android.gms.location.FusedLocationProviderClient
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.util.Locale
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
-fun VoiceScreen(navController: NavHostController) {
-    var text by remember { mutableStateOf("Press to say Kavach") }
+fun VoiceScreen(
+    navController: NavHostController,
+    fusedLocationClient: FusedLocationProviderClient,
+    smsManager: SmsManager
+) {
     val context = LocalContext.current
+    fun sendSMS(phoneNumber: String, location: Location) {
+        val lat = location.latitude
+        val lon = location.longitude
+        val sms = "HELP NEEDED LATITUDE:$lat LONGITUDE:$lon\n" +
+                "https://www.google.com/maps/search/?api=1&query=$lat,$lon"
+        Log.d("sms", phoneNumber + sms)
+        smsManager.sendTextMessage(
+            phoneNumber,
+            null, sms, null, null
+        )
+        Log.d("sms", "sent to $phoneNumber")
+    }
+    var text by remember { mutableStateOf("Press to say Kavach") }
     var hasMicPermission = ContextCompat.checkSelfPermission(
         context,
         android.Manifest.permission.RECORD_AUDIO
@@ -104,15 +129,25 @@ fun VoiceScreen(navController: NavHostController) {
             // An error occurred
         }
 
+        @SuppressLint("MissingPermission")
         override fun onResults(results: Bundle?) {
             val matches = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
             matches?.forEach { result ->
                 if (result.contains("kavach", ignoreCase = true)) {
                     Toast.makeText(context, "kavach detected", Toast.LENGTH_SHORT).show()
+                    text = "kavach detected"
+
+                    fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+                        Log.d("sms", "sms start")
+                        GlobalScope.launch {
+                            contactsList.value.forEach { contact ->
+                                sendSMS(contact.phoneNumber, location)
+                            }
+                        }
+                        speechRecognizer.stopListening()
+                    }
                 }
             }
-            text = "kavach detected"
-            speechRecognizer.stopListening()
         }
 
         override fun onPartialResults(partialResults: Bundle?) {
@@ -142,3 +177,4 @@ fun VoiceScreen(navController: NavHostController) {
         }
     }
 }
+

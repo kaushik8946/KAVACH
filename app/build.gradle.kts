@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -50,6 +51,7 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.runner)
+    implementation(libs.play.services.location)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -59,4 +61,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.8.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor("androidx.room:room-compiler:$room_version")
+    // To use Kotlin Symbol Processing (KSP)
+    ksp("androidx.room:room-compiler:$room_version")
+    implementation("com.google.android.gms:play-services-maps:18.1.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
 }
