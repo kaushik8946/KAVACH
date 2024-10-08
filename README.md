@@ -12,3 +12,12 @@
 - Kotlin
 - Jetpack Compose
 - SMS & GPS services
+
+# Requirements
+
+- Android Studio Ladybug | 2024.2.1
+- Android 10 (API level 29) or above
+- Gradle Version - 8.9
+- Android Gradle Plugin Version - 8.7.0
+- Java Development Kit (JDK) Version - JDK 19
+- Kotlin Version - 2.0.0
