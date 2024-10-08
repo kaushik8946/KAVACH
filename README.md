@@ -21,3 +21,4 @@
 - Android Gradle Plugin Version - 8.7.0
 - Java Development Kit (JDK) Version - JDK 19
 - Kotlin Version - 2.0.0
+- For more [Click here](https://github.com/kaushik8946/Kavach/blob/main/gradle/libs.versions.toml)
