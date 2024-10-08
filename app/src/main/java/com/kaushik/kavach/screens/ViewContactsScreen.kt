@@ -39,22 +39,16 @@ fun ViewContactsScreen(db: ContactDatabase) {
         verticalArrangement = Arrangement.Center
     ) {
         if (contactsList.value.isEmpty()) {
-            Text(text = "No contacts found")
+            Text(text = "No contacts found", fontSize = 20.sp)
         } else {
             LazyColumn {
                 item {
-                    Text("Saved Contacts are:", fontSize = 20.sp)
+                    Text("Saved Contacts are:", fontSize = 15.sp)
                 }
                 items(contactsList.value.size) { index ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Column(
-                            modifier = Modifier.padding(10.dp)
-                        ) {
-                            Text(text = contactsList.value[index].name, fontSize = 20.sp)
-                            Text(text = contactsList.value[index].phoneNumber, fontSize = 20.sp)
-                        }
                         Button(
                             onClick = {
                                 GlobalScope.launch {
@@ -64,6 +58,13 @@ fun ViewContactsScreen(db: ContactDatabase) {
                             }
                         ) {
                             Icon(imageVector = Icons.Default.Delete, contentDescription = "Delete")
+                        }
+
+                        Column(
+                            modifier = Modifier.padding(10.dp)
+                        ) {
+                            Text(text = contactsList.value[index].name, fontSize = 20.sp)
+                            Text(text = contactsList.value[index].phoneNumber, fontSize = 20.sp)
                         }
                     }
                 }

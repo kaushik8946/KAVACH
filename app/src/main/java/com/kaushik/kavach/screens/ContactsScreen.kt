@@ -1,5 +1,8 @@
 package com.kaushik.kavach.screens
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,8 +16,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.navigation.NavHostController
 import com.kaushik.kavach.db.ContactDatabase
 
@@ -37,7 +43,25 @@ fun ContactsScreen(navController: NavHostController, db: ContactDatabase) {
             modifier = cardModifier,
             elevation = cardElevation,
             onClick = {
-                /*var hasContactPermission = ContextCompat.checkSelfPermission(
+                navController.navigate("add-contact-manual")
+            }
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                Text(
+                    modifier = Modifier.align(Alignment.Center),
+                    text = "Add Contact Manually",
+                    textAlign = TextAlign.Center,
+                    fontSize = 30.sp
+                )
+            }
+        }
+        Card(
+            modifier = cardModifier,
+            elevation = cardElevation,
+            onClick = {
+                var hasContactPermission = ContextCompat.checkSelfPermission(
                     context,
                     Manifest.permission.READ_CONTACTS
                 ) == PackageManager.PERMISSION_GRANTED
@@ -54,8 +78,8 @@ fun ContactsScreen(navController: NavHostController, db: ContactDatabase) {
                 if(!hasContactPermission) {
                     navController.navigate("alert-contacts")
                 } else {
-                }*/
-                navController.navigate("add-contact")
+                    navController.navigate("import-contacts")
+                }
             }
         ) {
             Box(
@@ -63,7 +87,7 @@ fun ContactsScreen(navController: NavHostController, db: ContactDatabase) {
             ) {
                 Text(
                     modifier = Modifier.align(Alignment.Center),
-                    text = "Add Contact",
+                    text = "import contacts",
                     fontSize = 30.sp
                 )
             }
@@ -85,5 +109,6 @@ fun ContactsScreen(navController: NavHostController, db: ContactDatabase) {
                 )
             }
         }
+
     }
 }
