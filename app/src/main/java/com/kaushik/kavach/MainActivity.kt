@@ -35,7 +35,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         val smsManager = getSystemService(SmsManager::class.java)!!
         GlobalScope.launch {
-            phoneContactsMap = retrieveContacts(this@MainActivity)
+            phoneContactsMap = retrieveContacts(applicationContext)
         }
         val fusedLocationClient =
             LocationServices.getFusedLocationProviderClient(applicationContext)
@@ -90,7 +90,7 @@ class MainActivity : ComponentActivity() {
     override fun onStart() {
         super.onStart()
         GlobalScope.launch {
-            phoneContactsMap = retrieveContacts(this@MainActivity)
+            phoneContactsMap = retrieveContacts(applicationContext)
         }
         val permissions = arrayOf(
             android.Manifest.permission.RECORD_AUDIO,
